@@ -1,0 +1,37 @@
+{% include("cabecera.html") %}
+
+<!--LISTA DE USUARIOS-->
+
+<div>
+    <H1 class="text-center">Administracion de restaurantes</H1>
+</div>
+
+{% if restaurantes %}
+<table class="table table-sm">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Telefono</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for mostrar in restaurantes %}
+      <tr>
+        <th scope="row">{{mostrar.idrestaurante}}</th>
+        <td>{{mostrar.nombre}}</td>
+        <td>{{mostrar.tipo}}</td>
+        <td>{{mostrar.direccion}}</td>
+        <td>{{mostrar.telefono}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+<p>no hay datos joven</p>
+{% endif %}
+
+
+<!--------------------->

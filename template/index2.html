@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administracion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+        function confirmarBorrado() {
+            var respuesta = window.confirm("¿Estás seguro de que deseas borrar este elemento?");
+            if (respuesta === true) {
+                // Aquí puedes realizar la acción de borrado
+                alert("Elemento borrado"); // Solo un ejemplo de acción
+            } else {
+                // Si el usuario cancela, no haces nada o puedes mostrar otro mensaje
+                alert("Cancelaste el borrado"); // Solo un ejemplo de mensaje
+            }
+        }
+    </script>
+</head>
+<body>
+    <style>
+        /* Estilos para el mensaje de notificación */
+        .notificacion {
+            background-color: #f2f2f2;
+            border: 2px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+        
+        /* Estilo para el botón "Cerrar" en la notificación */
+        .cerrar {
+            color: #333;
+            float: right;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+
+    {%include ('cabecera.html')%}
+
+    <h1 class="text-center mt-5 mb-5 text-primary">Administrador de restaurantes</h1>
+
+    <div class="container">
+        <div class="card shadow">
+                <div class="card-body">
+                    <form action="/restaurante" method="post">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label>Nombre del restaurante:</label>
+                                <input type="text" class="form-control mb-3" name="txtNombreR">
+                            </div>
+                            <div class="container col">
+                                <label>Tipo de restaurante:</label>
+                                <form>
+                                    <select class="form-select" name="txtTipoR">
+                                        <option value="pizza">Pizza</option>
+                                        <option value="tacos">Tacos</option>
+                                        <option value="italian">Italian</option>
+                                        <option value="fast-food">Fast-food</option>
+                                    </select>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <label>Direccion</label>
+                                <input type="text" class="form-control mb-3" name="txtDireccionR">
+                            </div>
+                            <div class="col">
+                                <label>Telefono</label>
+                                <input type="text" class="form-control mb-3" name="txtTelefonoR">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary mb-3 mt-4" type="submit">Registar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                  
+
+                    <!--Tabla-->
+                    <table class="table table-bordered">
+                        <thead>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Direccion</th>
+                            <th scope="col">Telefono</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">Eliminar</th>
+                        </thead>
+                    
+                    <tbody>
+                        {% for mostrar in restaurantes %}
+                        <tr>
+                            <td>{{mostrar.idrestaurante}}</td>
+                            <td>{{mostrar.nombre}}</td>
+                            <td>{{mostrar.tipo}}</td>
+                            <td>{{mostrar.direccion}}</td>
+                            <td>{{mostrar.telefono}}</td>
+                            <td><button class="btn btn-primary btn-sm" id="btn-edit{{mostrar.idrestaurante}}" data-bs-toggle="modal" data-bs-target="#modal{{mostrar.idrestaurante}}">Editar</button></td>
+                            <td><a href="{{url_for('delete',idrestaurante=mostrar.idrestaurante)}}" onclick="confirmarBorrado()" class="btn btn-danger btn-sm">Eliminar</a></td>
+                        </tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal{{mostrar.idrestaurante}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">{{mostrar.nombre}}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/edit/{{mostrar.idrestaurante}}" method="POST">
+                                        <label>Nombre del restaurante:</label>
+                                        <input type="text" class="form-control mb-3" name="txtNombreR" value="{{mostrar.nombre}}">
+                                        <label>Tipo de restaurante:</label>
+                                        
+                                            <select class="form-select" name="txtTipoR"">
+                                                <option value="pizza" {% if mostrar.tipo == 'pizza' %}selected{% endif %}>pizza</option>
+                                                <option value="tacos" {% if mostrar.tipo == 'tacos' %}selected{% endif %}>tacos</option>
+                                                <option value="italian" {% if mostrar.tipo == 'italian' %}selected{% endif %}>italian</option>
+                                                <option value="fast-food" {% if mostrar.tipo == 'fast-food' %}selected{% endif %}>fast-food</option>
+                                            </select>
+                                        
+                                        <label>Direccion</label>
+                                        <input type="text" class="form-control mb-3" name="txtDireccionR" value="{{mostrar.direccion}}">
+                                        <label>Telefono</label>
+                                        <input type="text" class="form-control mb-3" name="txtTelefonoR" value="{{mostrar.telefono}}">
+                                </div>
+                                    <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Guardar edicion</button>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>      
+        </div>
+    </div>
+    
+</body>
+</html>

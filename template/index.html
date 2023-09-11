@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Login</title>
+</head>
+<body>
+
+    <style>
+       .caja{
+         margin: 5%;
+         margin-left: 35%;
+         margin-right: 35%;
+         background-color: #2d78da; /* Cambia este valor al color que desees */         
+         padding: 4px; /* Agrega un relleno para que el fondo sea visible alrededor del texto */
+    }
+
+       .login-label {
+            text-align: center; /* Centra horizontalmente */
+            margin-top: 35px; /* Añade margen superior para separarlo del contenido superior */
+            margin-bottom: 15px; 
+            font-size: 20px;
+            font-weight: bold;
+            font-family: Verdana;
+        }
+
+        .label{
+            margin-top: 10px; /* Añade margen superior para separarlo del contenido superior */
+            font-family: Verdana;
+        }
+
+        .bottonS{
+            text-align: center;
+            font-family: Verdana;
+            margin-bottom: 15px; 
+            width: 100%;
+        }
+    </style>
+
+    {%include ('cabecera.html')%}
+    <div class="caja card shadow">
+        <form class="form-control" action="acceso-login" method="post">
+
+           <div class="login-label">
+            <label>Inicio de sesion</label>
+           </div> 
+            
+            {% if mensaje %} 
+            <div class="alert alert-danger" role="alert">   
+                {{mensaje}}   
+              </div>
+              {% endif %}
+            <!--SEGUNDO MENSAJE DE RESPUESTA AL REGISTRO-->
+            {% if mensaje2 %} 
+              <div class="alert alert-success" role="alert">   
+                  {{mensaje2}}   
+                </div>
+            {% endif %}
+            <!---->
+            <div class="form-group">
+              <label class="label" for="exampleInputEmail1">Correo:</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu correo" name="txtCorreo">
+              
+            </div>
+            <div class="form-group">
+              <label class="label" exampleInputPassword1">Contraseña:</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ingrese su contraseña" name="txtPassword">
+            </div>
+            
+            <hr>
+            <div class="bottonS">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+            </div>
+            
+          </form>
+    </div>
+</body>
+</html>
